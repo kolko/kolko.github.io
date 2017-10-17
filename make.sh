@@ -6,7 +6,22 @@ for page in ./data/blog/*; do
     echo '{{indexmenu_n>1000}}' > ./opencarbon_kolko/start.txt
 done
 
+mkdir -p ./kolko.github.io
 echo "<html><body><h1>Статьи:</h1>" > ./index.html
 for page in ./data/blog/*; do
-    echo "<p><a href='https://kolko.github.io/data/blog/${page##*/}'>${page##*/}</a>" >> ./index.html
+    echo "<p><a href='https://kolko.github.io/kolko.github.io/${page##*/}.html'>${page##*/}</a>" >> ./index.html
+
+    echo '<html><body><script src="/showdown.min.js"></script><textarea id="sourceTA" style="display: none">' > ./kolko.github.io/${page##*/}.html
+    cat $page >> ./kolko.github.io/${page##*/}.html
+    echo "</textarea><div id='targetDiv'></div>
+    <script>
+  var text = document.getElementById('sourceTA').value,
+      target = document.getElementById('targetDiv'),
+      converter = new showdown.Converter(),
+      html = converter.makeHtml(text);
+
+    target.innerHTML = html;
+</script>
+</body>
+</html>" >> ./kolko.github.io/${page##*/}.html
 done

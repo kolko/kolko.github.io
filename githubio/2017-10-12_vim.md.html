@@ -1,0 +1,18 @@
+<html><body><script src="/showdown.min.js"></script><textarea id="sourceTA" style="display: none">
+# VIM.
+Tags: читательский дневник, vim
+
+Шикарный коммент  со [Stack Overflow](https://stackoverflow.com/questions/1218390/what-is-your-most-productive-shortcut-with-vim/1220118#1220118).
+После него очень хочется таки начать пользоваться vim'ом. Особенно порадовало погружение в историю, например, что grep появился как команда :g/re/p в ex. Часто, через понимание истории проще запоминать и понимать какие-либо команды и процессы.
+
+TODO: выписать полезности из комментария, короткий список того, чем можно начать пользоваться.</textarea><div id='targetDiv'></div>
+    <script>
+  var text = document.getElementById('sourceTA').value,
+      target = document.getElementById('targetDiv'),
+      converter = new showdown.Converter(),
+      html = converter.makeHtml(text);
+
+    target.innerHTML = html;
+</script>
+</body>
+</html>

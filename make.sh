@@ -25,3 +25,6 @@ for page in ./data/blog/*; do
 </body>
 </html>" >> ./githubio/${page##*/}.html
 done
+
+git add ./githubio
+git add ./opencarbon_kolko

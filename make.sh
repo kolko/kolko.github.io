@@ -7,7 +7,9 @@ for page in ./data/blog/*; do
 done
 
 mkdir -p ./githubio
-echo "<html><body><h1>Статьи:</h1>" > ./index.html
+echo "<html><body>
+<p>Есть <a href='http://opencarbon.ru/участники:kolko:start'>филиал</a></p>
+<h1>Статьи:</h1>" > ./index.html
 for page in ./data/blog/*; do
     echo "<p><a href='https://kolko.github.io/githubio/${page##*/}.html'>${page##*/}</a>" >> ./index.html
 

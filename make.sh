@@ -2,7 +2,8 @@
 
 mkdir -p ./opencarbon_kolko
 for page in ./data/blog/*; do
-    cp -a "$page" ./opencarbon_kolko/${page##*/}.txt
+    page_name="$(echo ${page##*/} | awk '{print tolower($0)}')"
+    cp -a "$page" ./opencarbon_kolko/${page_name}.txt
     echo '{{indexmenu_n>1000}}' > ./opencarbon_kolko/start.txt
 done
 

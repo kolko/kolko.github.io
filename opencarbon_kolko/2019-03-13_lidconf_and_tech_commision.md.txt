@@ -84,8 +84,8 @@ Tags: отзыв, управление разработкой
  - После утверждения чеклистов протестировать ревью технологии по нему в группе разработчиков, будет ли им интересно
 
 ### Ссылки:
- - Форум тимлидов (https://teamlead.discussion.community/)
- - Плейлист с митапа тимлидов (https://www.youtube.com/watch?v=T4T2CMwyGVg&list=PLZzb3aEhs6IjmaTG0YtH-yUCqblATsjet)
+ - Форум тимлидов <https://teamlead.discussion.community/>
+ - Плейлист с митапа тимлидов <https://www.youtube.com/watch?v=T4T2CMwyGVg&list=PLZzb3aEhs6IjmaTG0YtH-yUCqblATsjet>
 
 
 

@@ -9,13 +9,13 @@ done
 
 mkdir -p ./githubio
 echo "<html><body>
-<p>Есть <a href='http://opencarbon.ru/участники:kolko:start'>филиал</a></p>
+<p>Есть <a href='http://opencarbon.ru/блоги_и_отзывы:krat_nikolay:start'>филиал</a></p>
 <h1>Статьи:</h1>" > ./index.html
-for page in ./data/blog/*; do
-    echo "<p><a href='https://kolko.github.io/githubio/${page##*/}.html'>${page##*/}</a>" >> ./index.html
+for page in $( ls ./data/blog/ | sort -r); do
+    echo "<p><a href='/githubio/${page##*/}.html'>${page##*/}</a>" >> ./index.html
 
     echo '<html><body><script src="/showdown.min.js"></script><textarea id="sourceTA" style="display: none">' > ./githubio/${page##*/}.html
-    cat $page >> ./githubio/${page##*/}.html
+    cat ./data/blog/${page} >> ./githubio/${page##*/}.html
     echo "</textarea><div id='targetDiv'></div>
     <script>
   var text = document.getElementById('sourceTA').value,

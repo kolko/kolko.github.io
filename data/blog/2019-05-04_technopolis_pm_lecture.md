@@ -58,11 +58,13 @@ Tags: читательский дневник, управление проект
 ### GAP анализ
 
 **Принцип:**
+
 - Определяем текущее состояние
 - Определяем идеальное состояние в будущем
 - Строим мост!
 
 **Методы GAP-анализа:**
+
 - SWOT (сильные стороны, слабые стороны, возможности, угрозы) [википедия](https://ru.wikipedia.org/wiki/SWOT-анализ) [Схема](https://github.com/kolko/kolko.github.io/raw/master/data/static/2019-05-04_technopolis_pm_lecture/swot.png)
 - McKinsey 7s Framework [википедия](https://en.wikipedia.org/wiki/McKinsey_7S_Framework) [Схема](https://github.com/kolko/kolko.github.io/raw/master/data/static/2019-05-04_technopolis_pm_lecture/McKinsey-7S-Framework.png) [Схема 2](https://github.com/kolko/kolko.github.io/raw/master/data/static/2019-05-04_technopolis_pm_lecture/7-s-framework-commented-by-bscdesigner.png)
 - Value proposition canvas. [Схема](https://github.com/kolko/kolko.github.io/raw/master/data/static/2019-05-04_technopolis_pm_lecture/value-proposition-canvas.jpg)

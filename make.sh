@@ -25,6 +25,17 @@ echo "<html>
 </script>
 <noscript><div><img src='https://mc.yandex.ru/watch/53586970' style='position:absolute; left:-9999px;' alt='' /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src='https://www.googletagmanager.com/gtag/js?id=UA-139905506-1'></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-139905506-1');
+</script>
+
 </head>
 <body>
 <p>Есть <a href='http://opencarbon.ru/блоги_и_отзывы:krat_nikolay:start'>филиал</a></p>
@@ -48,6 +59,17 @@ for page in $( ls ./data/blog/ | sort -r); do
 </script>
 <noscript><div><img src='https://mc.yandex.ru/watch/53586970' style='position:absolute; left:-9999px;' alt='' /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src='https://www.googletagmanager.com/gtag/js?id=UA-139905506-1'></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-139905506-1');
+</script>
+
     </head>" > ./githubio/${page##*/}.html
 
     echo '<body><script src="/showdown.min.js"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html

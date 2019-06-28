@@ -57,7 +57,7 @@ ip rule add from 10.0.0.0/8 fwmark 1 table uplink1
 
 Еще один способ - распределить полосы по пользователям (подходит если кому-то нужен выделенный канал или если вас не волнует полная утилизация каналов). Для NAT не подойдет. Здесь нужно применить policy-routing:
 ```
-ip rule from x.x.x.x table uplink1
+ip rule add from x.x.x.x table uplink1
 ip route add default via y.y.y.y dev eth0
 ip route add default via z.z.z.z dev eth1 table uplink1
 ```

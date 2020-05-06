@@ -8,6 +8,8 @@ Tags: cloud, архитектура, конспект
 
 При построении архитектуры, а особенно архитектуры, которая подвержена большому росту - такой как архитектура облака, требуется учитывать все известные проблемы эксплуатации, а так же учитывать все возможные проблемы, вероятность которых предполагается крайне малой. Запас прочности и надежные архитектурыне решения позволят пережить и локализовать проблему, и сделать так, чтобы большая часть клиентов этого и не заметила.
 
+Речь пойдет про Control Plane - слой управления.
+
 Теги автора:
 - Мы котроллируем факап, а не он нас.
 - Минимизируем радиус взрыва (ущерб от факапа).
@@ -74,11 +76,21 @@ Tags: cloud, архитектура, конспект
 
 **Картинки объяснят лучше меня:**
 
-![Картинка 1](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding1.png =550x550)
+![Картинка 1](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding1.png =550x414)
 
-![Картинка 2](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding2.png =550x550)
+1. Шумный сосед перегружает систему, страдает клиент который делит с ним шарды.
 
-![Картинка 3](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding3.png =550x550)
+![Картинка 2](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding2.png =550x263)
+
+2. Распределяем клиентов по шардам "случайно".
+
+![Картинка 3](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding3.png =550x377)
+
+3. Шумный сосед делает перегруз, но этого никто практически не замечает.
+
+4. ???
+
+5. PROFIT!
 
 
 #### 7. Small fleet calls big fleet. Малый флот вызывает большой флот.
@@ -100,7 +112,7 @@ Tags: cloud, архитектура, конспект
 
 **Картинка:**
 
-![Картинка ](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shedding.png =550x550)
+![Картинка ](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shedding.png =550x288)
 
 Помнится, эту тему хорошо раскрыл Константин Осипов в докладе [Принципы и приёмы обработки очередей](https://www.youtube.com/watch?v=CvT1v7xiRS0)
 

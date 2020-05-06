@@ -38,23 +38,16 @@ Tags: компиляторы, грамматики
 - ЧЕМ СЕЙЧАС ПАРСИТСЯ СИ, ПЛЮСЫ, ПИТОН, JAVA???
 - Чем парсить bash? Чем пользуется shellcheck?
 
+
 #### Ссылки изучить
+- https://pygments.org/docs/lexers/?highlight=bash
+- https://news.ycombinator.com/item?id=14550301
+- http://www.aosabook.org/en/bash.html
+- https://www.oilshell.org/blog/2019/02/07.html
+- https://github.com/nil0x42/shnake/blob/master/shnake/lexer.py
+- https://stackoverflow.com/questions/5491775/how-to-write-a-shell-lexer-by-hand
 
 
-https://pygments.org/docs/lexers/?highlight=bash
-
-https://news.ycombinator.com/item?id=14550301
-
-http://www.aosabook.org/en/bash.html
-
-https://www.oilshell.org/blog/2019/02/07.html
-
-https://github.com/nil0x42/shnake/blob/master/shnake/lexer.py
-
-https://stackoverflow.com/questions/5491775/how-to-write-a-shell-lexer-by-hand
-
-
-**qwe:**
 
 
 3 основных типа синтаксических анализаторов: универсальный, нисходящий и восходящий.
@@ -267,7 +260,52 @@ L-атрибутное СУО можно реализовать только в 
 
 В статье еще есть хороший пример грамматики общего вида. «У получившегося алгоритма есть интересная особенность: правила со сложной левой частью позволяют как бы «перемещать» группы символов; в данном случае нетерминалы перемещаются в правую часть строки. Похожий паттерн часто встречается в алгоритмах для машин Тьюринга.»
 
-![Картинка из статьи 3](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_static_analysis/habr_3.jpg =550x472)</textarea><div id='targetDiv'></div>
+![Картинка из статьи 3](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_static_analysis/habr_3.jpg =550x472)
+
+
+#### Примеры разбора нерегулярного языка с помощью регулярных выражений
+
+В книге [Регулярные выражения](https://www.goodreads.com/book/show/583628.Mastering_Regular_Expressions) Джеффри Фридла было два решения для разбора нерегулярной грамматики на примере задачи парных скобок.
+
+1. Вызов программного кода во время выполнения НКА регулярного выражения, на примере мощных регулярок Perl. После нахождения скобки, вызывается код:
+
+```
+my $NestedGuts = qr{
+    (?{ local $OpenParents = 0 }) # инициализируем переменную, (?{ }) - конструкция вызова кода
+    (?> # атомарная группировка (я уже и не помню что это, обидно)
+        (?:
+            [^()]+
+            |
+            \( (?{ $OpenParents++ }) # Увеличиваем счеткик на открывающейся скобке
+            |
+            \) (?(?{ $OpenParents != 0 }) (?{ $OpenParents-- }) | (?!) ) # Если счетчик равен нулю, то (?!) сгенерирует ошибку
+        )*
+    )
+    (?(?{ $OpenParents != 0 }) (?!) ) # Если остались незакрытые скобки - генерируем ошибку
+}x;
+```
+
+
+2. Динамические регулярные выражения (я где-то слышал название "Рекурсивные регулярные выражения"). Это возможность сохранить регулярное выражение в переменную и ссылаться на нее из самого регулярного выражения. Пример на Perl:
+
+```
+my $LevelN;
+$LevelN = qr/ \( ( [^()] | (??{ $LevelN }) )* \) /x;
+
+# Оптимизированная версия:
+$LevelN = qr/ (?> [^()]+ | \( (??{ $LevelN }) \) )* /x;
+```
+
+Пример на Python и библиотеки https://pypi.org/project/regex/:
+
+```
+>>> regex.match(r'\(((?:(?R)+|[^()]+)*)\)', '(qwe(qw(q)(q)))').groups()
+('qwe(qw(q)(q))',)
+
+# Не получилось вывести вложенные группы и не получилось добавить якоря начала и конца строки. Но он ловит только парные скобки
+```
+
+</textarea><div id='targetDiv'></div>
     <script>
   var text = document.getElementById('sourceTA').value,
       target = document.getElementById('targetDiv'),

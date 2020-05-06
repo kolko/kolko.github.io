@@ -72,7 +72,11 @@ for page in $( ls ./data/blog/ | sort -r); do
 
     </head>" > ./githubio/${page##*/}.html
 
-    echo '<body><script src="/showdown-new.min.js"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html
+    if [[ "$page" == "2020-"* ]]; then
+        echo '<body><script src="/showdown-new.min.js?v=2"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html
+    else
+        echo '<body><script src="/showdown.min.js"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html
+    fi
     cat ./data/blog/${page} >> ./githubio/${page##*/}.html
     echo "</textarea><div id='targetDiv'></div>
     <script>

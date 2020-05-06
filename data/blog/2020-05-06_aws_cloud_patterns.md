@@ -63,9 +63,9 @@ Tags: cloud, архитектура, конспект
 
 **Картинки объяснят лучше меня:**
 
-![Картинка 1](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/tenant1.png =550)
+![Картинка 1](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/tenant1.png =550x247)
 
-![Картинка 2](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/tenant2.png =550)
+![Картинка 2](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/tenant2.png =550x302)
 
 
 #### 6. Shuffle sharding. Перемешанное шардирование.
@@ -74,11 +74,11 @@ Tags: cloud, архитектура, конспект
 
 **Картинки объяснят лучше меня:**
 
-![Картинка 1](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding1.png =550)
+![Картинка 1](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding1.png =550x550)
 
-![Картинка 2](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding2.png =550)
+![Картинка 2](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding2.png =550x550)
 
-![Картинка 3](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding3.png =550)
+![Картинка 3](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shuffle_sharding3.png =550x550)
 
 
 #### 7. Small fleet calls big fleet. Малый флот вызывает большой флот.
@@ -100,7 +100,7 @@ Tags: cloud, архитектура, конспект
 
 **Картинка:**
 
-![Картинка ](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shedding.png =550)
+![Картинка ](https://github.com/kolko/kolko.github.io/raw/master/data/static/2020-05-06_aws_cloud_patterns/shedding.png =550x550)
 
 Помнится, эту тему хорошо раскрыл Константин Осипов в докладе [Принципы и приёмы обработки очередей](https://www.youtube.com/watch?v=CvT1v7xiRS0)
 

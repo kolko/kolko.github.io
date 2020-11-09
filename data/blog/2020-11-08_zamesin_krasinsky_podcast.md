@@ -1,7 +1,7 @@
 # Конспект поскаста Ильи Заметина "Илья Красинский про принципы мышления и стратегии жизни".
 Tags: психология, развитие, конспект
 
-[https://zamesin.me/ru-podcast-krasinsky/]
+[https://zamesin.me/ru-podcast-krasinsky/](https://zamesin.me/ru-podcast-krasinsky/)
 
 
 ... Даже когда я еще работал в Самаре, у меня было правило, что 30% рабочего времени

@@ -69,7 +69,8 @@ for page in $( ls ./data/blog/ | sort -r); do
 
   gtag('config', 'UA-139905506-1');
 </script>
-
+<title>$(head -n 1 ./data/blog/${page} | tr '#' ' ')</title>
+<Description>$(head -n 6 ./data/blog/${page} | tail -n 5)</Description>
     </head>" > ./githubio/${page##*/}.html
 
     if [[ "$page" == "2020-"* ]]; then

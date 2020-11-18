@@ -8,7 +8,7 @@ for page in ./data/blog/*; do
 done
 
 mkdir -p ./githubio
-echo "<html>
+echo "<html lang='ru-RU'>
 <head>
 <!-- Yandex.Metrika counter -->
 <script type='text/javascript' >
@@ -35,15 +35,17 @@ echo "<html>
 
   gtag('config', 'UA-139905506-1');
 </script>
+<title>Блог об IT и около</title>
+<Description>IT, программирование, управление, бизнес, психология, эффективность</Description>
 
 </head>
 <body>
-<p>Есть <a href='http://opencarbon.ru/блоги_и_отзывы:krat_nikolay:start'>филиал</a></p>
+<p>Есть <a href='https://dev7.cloudfox.com/блоги_и_отзывы:krat_nikolay:start'>филиал</a></p>
 <h1>Статьи:</h1>" > ./index.html
 for page in $( ls ./data/blog/ | sort -r); do
     echo "<p><a href='/githubio/${page##*/}.html'>${page##*/}</a>" >> ./index.html
 
-    echo "<html><head>
+    echo "<html lang='ru-RU'><head>
     <!-- Yandex.Metrika counter -->
 <script type='text/javascript' >
    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -74,9 +76,9 @@ for page in $( ls ./data/blog/ | sort -r); do
     </head>" > ./githubio/${page##*/}.html
 
     if [[ "$page" == "2020-"* ]]; then
-        echo '<body><script src="/showdown-new.min.js?v=2"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html
+        echo '<body><a href="/">Назад</a><br><br><script src="/showdown-new.min.js?v=2"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html
     else
-        echo '<body><script src="/showdown.min.js"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html
+        echo '<body><a href="/">Назад</a><br><br><script src="/showdown.min.js"></script><textarea id="sourceTA" style="display: none">' >> ./githubio/${page##*/}.html
     fi
     cat ./data/blog/${page} >> ./githubio/${page##*/}.html
     echo "</textarea><div id='targetDiv'></div>

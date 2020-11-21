@@ -1,0 +1,214 @@
+<html lang='ru-RU'><head>
+    <!-- Yandex.Metrika counter -->
+<script type='text/javascript' >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+   ym(53586970, 'init', {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src='https://mc.yandex.ru/watch/53586970' style='position:absolute; left:-9999px;' alt='' /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src='https://www.googletagmanager.com/gtag/js?id=UA-139905506-1'></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-139905506-1');
+</script>
+<title>MVP Блог.   Использование noproc в bash или как убить tail</title>
+<Description>Tags: bash, разработка
+
+
+Была задача организовать "консольный интерфейс" для приложения через промежуточные файлы, так как приложение должно было работать постоянно, а писать ему в stdin нужно было периодически. Сделали вот так:</Description>
+    </head>
+<body><a href="/">Назад</a><br><br><script src="/showdown-new.min.js?v=2"></script><textarea id="sourceTA" style="display: none">
+# Использование noproc в bash или как убить tail
+Tags: bash, разработка
+
+
+Была задача организовать "консольный интерфейс" для приложения через промежуточные файлы, так как приложение должно было работать постоянно, а писать ему в stdin нужно было периодически. Сделали вот так:
+
+```bash
+setsid bash -c "tail -F $CONSOLE_DIR/.console_in | console-prog $NAME 2>&1; " \
+	&>>$CONSOLE_DIR/.console_out </dev/null & disown -a || true
+```
+
+Важной особенностью console-prog было, что он мог завершить свою работу в любой момент. Поэтому, приложение которое взаимодействует с консолью всегда сначала проверяет не нужно ли перезапустить его:
+
+```bash
+if ! ps aux | grep 'console-prog $NAME'; then
+    setsid bash -c ...
+fi
+```
+
+Через какое-то время в продакшене видим такую картину:
+
+```
+root     1000362  0.0  0.0 107992   452 ?        S    июл05   0:00 tail -F /opt/prog/9855ac27-586a-4442-b1da-793982aebb9f/tmp/.console_in
+root     1000813  0.0  0.0 107992   452 ?        S    июл07   0:00 tail -F /opt/prog/ca3a71d4-8466-46f1-92b2-3ab621da4998/tmp/.console_in
+root     1000868  0.0  0.0 107992   496 ?        S    июл28   0:00 tail -F /opt/prog/dffa67a4-fcdf-4c9a-9c32-a6ad21df1b13/tmp/.console_in
+root     1002068  0.0  0.0 107992   452 ?        S    июл21   0:00 tail -F /opt/prog/8ed9b8af-acdc-4e75-8411-011e5162071d/tmp/.console_in
+root     1002782  0.0  0.0 107992   452 ?        S    июн26   0:00 tail -F /opt/prog/3d33fa6b-6f1e-491a-81ce-b9900288dd4c/tmp/.console_in
+root     1003211  0.0  0.0 107992   452 ?        S    июл11   0:00 tail -F /opt/prog/8ed9b8af-acdc-4e75-8411-011e526207ad/tmp/.console_in
+root     1005050  0.0  0.0 107992   452 ?        S    июн30   0:00 tail -F /opt/prog/cb4615be-d37c-4c3e-a3d2-425561a648a5/tmp/.console_in
+....
+```
+
+Очень много зависших tail. Причем, много tail на одинаковые файлы. Просмотр pstree объясняет что случилось:
+
+```
+# pstree -upal | grep -C 10 --color "ee1e565c"
+
+  |-bash,422966 -c tail -F /opt/prog/ee1e565c-8125-4d4b-b33c/tmp/.console_in | console-prog ee1e565c 2>&1
+  |   |-tail,422970 -F /opt/prog/ee1e565c-8125-4d4b-b33c/tmp/.console_in
+  |   `-console-prog,422971 ee1e565c
+  |       `-console-prog,422975 ee1e565c
+...
+  |-tail,412342 -F /opt/prog/ee1e565c-8125-4d4b-b33c/tmp/.console_in
+...
+  |-tail,43271 -F /opt/prog/ee1e565c-8125-4d4b-b33c/tmp/.console_in
+...
+```
+
+Видим, что только один tail работает с console-prog, у остальных он завершил работу, но tail при этом остался.
+
+Интересно, почему bash тоже завершился и tail "осиротел", но я пока не понял почему. Возможно пайп можно использовать как disown :)
+
+
+### Как убивать осиротевший tail?
+
+Есть много способов, как можно попробовать это исправить:
+
+
+##### В коде, который перезапускает консоль, проверять что есть зависшие tail и убивать их.
+
+```bash
+if ! ps aux | grep 'console-prog $NAME'; then
+    ps aux | grep "tail -F $CONSOLE_DIR/.console_in" | while read -r t pid t; do
+        kill $pid
+    done
+    ...
+```
+
+Причем нужные tail'ы мы сможем легко найти по имени файла. Проблема в том, что убивать tail нужно не только при перезапуске консоли, но и при всех штатных и внештатных завершениях работы контейнера $NAME. А так как $NAME может накапливаться много, желательно еще сделать отдельный мониторинг зависших tail, которые мы не смогли отловить в штатном режиме.
+
+Кажется, что все эти костыли из-за неправильного решения.
+
+
+##### set -e; set -o pipefail
+
+Внутри запускаемой оболочки bash -c '...' можно выставить специальные флаги, которые не дадут гасить ошибку пайпом и заставит приложение завершить работу.
+
+```
+bash -c 'set -e; set -o pipefail; tail -F /tmp/1 | { sleep 1; exit 1; }' # должно завершиться, не сработало
+```
+
+...такая была теория, но она не сработала. Возможно, есть другие спец.флаги, но я решил поискать другое решение.
+
+
+##### exit trap
+
+По аналогии с предыдущим вариантом, в запускаемой оболочке можно повешать хук на ее завершение (а мы видели в pstree, что bash, в котором все запускается, завершается и tail остается один).
+
+Но тогда код запуска стал бы очень большим: функция завершения работы, установка trap, плюс нужно как-то получить pid'ы процессов...
+
+В одну строчку не влезло, пойдем дальше.
+
+
+##### tail --pid=
+
+Сейчас стоит упомянуть, что у tail есть специальная опция --pid:
+```
+      --pid=PID            с ключом -f, прерваться, когда процесс PID
+                           завершает работу
+```
+
+То что нужно! Но непонятно как получить pid от console-prog.
+
+
+##### exec и доп. дескрипторы?
+
+Если мы сначала запустим console-prog, получим его pid, а потом "подключим" в него tail с --pid - должно сработать.
+
+Наверняка это можно сделать через доп. дескрипторы и команду exec!
+
+Но как это сделать я сходу не придумал...
+
+
+##### mkfifo
+
+Стандартными средствами linux можно сделать файловый именованный канал и подключить его к приложению.
+
+```
+Example
+
+# mkfifo test
+# cat test | cat&
+qwerty
+[1]+  Done                    cat test | cat
+# echo qwerty > test
+... Зависли ...
+```
+
+С его помощью мы могли бы разрулить порядок запуска tail и console-prog. А по-хорошему, tail с файлом нам становится не нужен, ведь работа через fifo - выглядит как более правильный интерфейс для консоли!
+
+Но во-первых, менять интерфейс, без изучения нового инструмента, не хотелось. Во-вторых, во время испытания он уже показал различия: если из пайпа ни кто не будет читать, то пишущее приложение зависает. А это не сулит ничего хорошего (мало ли какой скрипт пользуется консолью).
+
+Решение хорошее, но на перспективу.
+
+
+##### noproc
+
+В bash версии 4 завезли сопроцессы, как говорят, из ksh. [Статья на bash-hackers](https://wiki.bash-hackers.org/syntax/keywords/coproc).
+
+Благодаря им, мы можем запустить нужное нам приложение и уже потом подключить его к пайпу. Получаем:
+
+```bash
+setsid bash -c "coproc console-prog $NAME &>>$CONSOLE_DIR/tmp/.console_out; \
+	tail --pid=\$COPROC_PID -F $CONSOLE_DIR/tmp/.console_in >&\${COPROC[1]}" \
+	</dev/null & disown -a
+```
+
+Здесь мы смоги в tail пробросить pid с помощью переменной окружения **$COPROC_PID**, а в массиве **${COPROC[..]}** лежат файловые дескрипторы приложения, через которые можно сцепить stdout tail'a и stdin console-prog. (Где-то находил, что код возврата можно получить повторным вызовом coproc без аргументов, но это не работает)
+
+Еще один плюс, в отличие от mkfifo, если tail начнет писать когда console-prog уже завершил работу - он не зависнет в ожидании что кто-то вычитает буфер, а получит ошибку.
+
+Конечно, это решение может принести проблемы, я не использовал noproc в продакшене раньше. Но решение получилось максимально приближенное к изначальному, с минимумом изменений (в отличии от решения через mkfifo) и достаточно лаконичное.
+
+
+##### Bonus
+
+Пока писал часть про exec, наткнулся на интересный хак на [stackoverflow](https://stackoverflow.com/questions/1652680/how-to-get-the-pid-of-a-process-that-is-piped-to-another-process-in-bash), выглядит он так:
+
+```bash
+( tail -f $1 & echo $! >&3 ) 3>pid | nc -l -p 9977
+kill $(<pid)
+```
+
+Другими словами:
+```bash
+(tail -F /tmp/1 & echo $! >&3 ) 3>pid | sleep 10; kill $(cat pid) # убъёт tail только когда завершится sleep
+```
+
+Если из 3го дескриптора прочитать pid в переменную, а не записывать в файл - будет еще круче.
+
+Но мне уже не хочется переделывать, merge-request с noproc уже принят :) Но вы - берите на вооружение!</textarea><div id='targetDiv'></div>
+    <script>
+  var text = document.getElementById('sourceTA').value,
+      target = document.getElementById('targetDiv'),
+      converter = new showdown.Converter(),
+      html = converter.makeHtml(text);
+
+    target.innerHTML = html;
+</script>
+</body>
+</html>

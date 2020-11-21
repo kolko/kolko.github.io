@@ -35,7 +35,7 @@ echo "<html lang='ru-RU'>
 
   gtag('config', 'UA-139905506-1');
 </script>
-<title>Блог об IT и около</title>
+<title>MVP Блог об IT и около</title>
 <Description>IT, программирование, управление, бизнес, психология, эффективность</Description>
 
 </head>
@@ -71,7 +71,7 @@ for page in $( ls ./data/blog/ | sort -r); do
 
   gtag('config', 'UA-139905506-1');
 </script>
-<title>$(head -n 1 ./data/blog/${page} | tr '#' ' ')</title>
+<title>MVP Блог. $(head -n 1 ./data/blog/${page} | tr '#' ' ')</title>
 <Description>$(head -n 6 ./data/blog/${page} | tail -n 5)</Description>
     </head>" > ./githubio/${page##*/}.html
 

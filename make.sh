@@ -35,8 +35,13 @@ echo "<html lang='ru-RU'>
 
   gtag('config', 'UA-139905506-1');
 </script>
+<meta charset='utf-8'>
+
 <title>MVP Блог об IT и около</title>
 <Description>IT, программирование, управление, бизнес, психология, эффективность</Description>
+
+<meta name='description' content='IT, программирование, управление, бизнес, психология, эффективность'>
+<meta name='keywords' content='IT программирование управление бизнес психология эффективность'>
 
 </head>
 <body>
@@ -72,7 +77,9 @@ for page in $( ls ./data/blog/ | sort -r); do
   gtag('config', 'UA-139905506-1');
 </script>
 <title>MVP Блог. $(head -n 1 ./data/blog/${page} | tr '#' ' ')</title>
-<Description>$(head -n 6 ./data/blog/${page} | tail -n 5)</Description>
+
+<meta name='description' content='$(head -n 6 ./data/blog/${page} | tail -n 5)'>
+<meta name='keywords' content='IT программирование управление бизнес психология эффективность'>
     </head>" > ./githubio/${page##*/}.html
 
     if [[ "$page" == "2020-"* ]]; then
